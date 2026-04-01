@@ -1,0 +1,289 @@
+import { useParams } from 'react-router-dom';
+import { useReadContract } from 'wagmi';
+import { addressAgriChain, aBIAgriChain, mapBatch } from '../lib/contract';
+import BatchTimeline from '../components/BatchTimeline';
+import { formatEther } from 'viem';
+import {
+  ShieldCheck, Package, MapPin, User, Banknote,
+  Loader2, AlertCircle, Sprout, ArrowUpRight,
+} from 'lucide-react';
+
+const statusMap = {
+  0: "Harvested", 1: "In Transit", 2: "At Warehouse",
+  3: "Out for Delivery", 4: "Delivered",
+};
+const statusAccent = {
+  0: 'var(--color-green)', 1: 'var(--color-blue)',
+  2: '#a855f7', 3: '#f97316', 4: 'var(--color-green)',
+};
+const ZERO_ADDR = "0x0000000000000000000000000000000000000000";
+
+function DetailItem({ icon, label, value, fallback = "N/A", isAddress = false, isMono = false }) {
+  const display = value || fallback;
+  return (
+    <div className="flex items-start gap-4">
+      <div
+        className="p-3 rounded-xl flex-shrink-0"
+        style={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border)' }}
+      >
+        {icon}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-[9px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--color-muted)' }}>
+          {label}
+        </p>
+        <p
+          className={`font-medium break-all ${isAddress ? 'font-mono text-[10px] leading-relaxed' : isMono ? 'font-mono text-lg' : !value ? 'italic text-sm' : 'text-base'}`}
+          style={{
+            color: isAddress ? 'rgba(45,212,191,0.75)' :
+                   isMono    ? 'var(--color-green)' :
+                   !value    ? 'var(--color-muted)' :
+                               'var(--color-text)',
+          }}
+        >
+          {display}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function VerifyPage() {
+  const { batchId } = useParams();
+
+  const isValidId = batchId && !isNaN(batchId) && batchId.trim() !== '';
+  const idArg = isValidId ? BigInt(batchId) : 0n;
+
+  const { data: rawData, isLoading: bLoading, isError } = useReadContract({
+    address: addressAgriChain,
+    abi: aBIAgriChain,
+    functionName: 'getBatch',
+    args: [idArg],
+    query: { enabled: isValidId },
+  });
+
+  const { data: historyData, isLoading: hLoading } = useReadContract({
+    address: addressAgriChain,
+    abi: aBIAgriChain,
+    functionName: 'getStatusHistory',
+    args: [idArg],
+    query: { enabled: isValidId },
+  });
+
+  const batch = rawData ? mapBatch(rawData) : null;
+  const isValidBatch = batch && batch.cropName;
+
+  /* ── Loading ─────────────────────────────────────────────── */
+  if (bLoading || hLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
+        <div className="text-center space-y-4">
+          <Loader2 className="animate-spin w-10 h-10 mx-auto" style={{ color: 'var(--color-green)' }} />
+          <p className="font-mono text-sm" style={{ color: 'var(--color-muted)' }}>Verifying on Sepolia...</p>
+        </div>
+      </div>
+    );
+  }
+
+  /* ── Not found ───────────────────────────────────────────── */
+  if (!isValidId || isError || !isValidBatch) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--color-bg)' }}>
+        <div className="text-center max-w-sm space-y-4">
+          <div
+            className="inline-flex items-center justify-center w-16 h-16 rounded-2xl"
+            style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)' }}
+          >
+            <AlertCircle className="w-8 h-8" style={{ color: 'var(--color-red)' }} />
+          </div>
+          <h2 className="text-2xl font-bold">Batch Not Found</h2>
+          <p className="text-sm" style={{ color: 'var(--color-muted)' }}>
+            {!isValidId
+              ? "No batch ID provided in the URL."
+              : `Batch #${batchId} does not exist on Sepolia or could not be loaded.`}
+          </p>
+          <div
+            className="rounded-xl px-4 py-3 text-xs font-mono"
+            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)', color: 'var(--color-muted)' }}
+          >
+            Expected URL: /verify/&#123;batchId&#125;
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const safePrice   = batch.price ?? 0n;
+  const hasRetailer = batch.buyer && batch.buyer !== ZERO_ADDR;
+
+  return (
+    <div className="min-h-screen" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}>
+      <main className="px-12 py-12 max-w-[1400px] mx-auto space-y-16 pb-32">
+
+        {/* HERO */}
+        <div className="flex justify-between items-start gap-10">
+          <div className="max-w-2xl">
+            <p className="text-xs tracking-widest font-bold mb-4" style={{ color: 'var(--color-green)' }}>
+              CONSUMER VERIFICATION
+            </p>
+            <h1 className="text-5xl font-bold leading-tight">
+              Trace your <span className="italic" style={{ color: 'var(--color-green)' }}>Produce.</span>
+            </h1>
+            <p className="mt-4" style={{ color: 'var(--color-muted)' }}>
+              Every detail below is immutable — written to Ethereum Sepolia and tamper-proof.
+            </p>
+          </div>
+          <div
+            className="px-6 py-4 rounded-xl min-w-[220px]"
+            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-green)' }}
+          >
+            <p className="text-xs" style={{ color: 'var(--color-muted)' }}>VERIFICATION NODE</p>
+            <h2 className="font-bold" style={{ color: 'var(--color-green)' }}>Sepolia Testnet</h2>
+            <div className="flex items-center gap-2 mt-2">
+              <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--color-green)' }} />
+              <span className="text-xs font-bold" style={{ color: 'var(--color-green)' }}>
+                {statusMap[batch.status]}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* MAIN CARD */}
+        <div className="grid grid-cols-12 gap-12 items-start">
+
+          {/* Left col — product identity */}
+          <div className="col-span-7 card space-y-6">
+            <div className="flex justify-between items-start">
+              <div>
+                <div className="flex items-center gap-1.5 mb-3">
+                  <Sprout size={11} style={{ color: 'var(--color-green)' }} />
+                  <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: 'var(--color-green)' }}>
+                    Farm to Table
+                  </span>
+                </div>
+                <h2 className="text-5xl font-bold uppercase tracking-tight">{batch.cropName}</h2>
+                <p className="font-mono text-[10px] mt-2" style={{ color: 'var(--color-muted)' }}>
+                  Batch #{batchId} · {addressAgriChain.slice(0, 14)}...
+                </p>
+              </div>
+              <div
+                className="px-5 py-3 rounded-xl text-center flex-shrink-0"
+                style={{
+                  background: 'var(--color-surface-2)',
+                  border: `1px solid ${statusAccent[batch.status]}44`,
+                }}
+              >
+                <p className="text-[9px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--color-muted)' }}>
+                  State
+                </p>
+                <p className="text-lg font-bold" style={{ color: statusAccent[batch.status] }}>
+                  {statusMap[batch.status]}
+                </p>
+              </div>
+            </div>
+
+            {/* Details grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4" style={{ borderTop: '1px solid var(--color-border)' }}>
+              <DetailItem
+                icon={<User className="w-5 h-5" style={{ color: 'var(--color-green)' }} />}
+                label="Farmer Wallet"
+                value={batch.farmer}
+                isAddress
+              />
+              <DetailItem
+                icon={<User className="w-5 h-5" style={{ color: 'var(--color-indigo)' }} />}
+                label="Retailer Wallet"
+                value={hasRetailer ? batch.buyer : null}
+                fallback="Awaiting Purchase"
+                isAddress={!!hasRetailer}
+              />
+              <DetailItem
+                icon={<Package className="w-5 h-5" style={{ color: 'var(--color-blue)' }} />}
+                label="Quantity"
+                value={batch.quantity}
+              />
+              <DetailItem
+                icon={<MapPin className="w-5 h-5" style={{ color: '#f43f5e' }} />}
+                label="Farm Origin"
+                value={batch.location}
+              />
+              <div className="sm:col-span-2">
+                <DetailItem
+                  icon={<Banknote className="w-5 h-5" style={{ color: '#a855f7' }} />}
+                  label="Escrow Value"
+                  value={`${formatEther(safePrice)} ETH`}
+                  isMono
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Right col — stats card */}
+          <div className="col-span-5 space-y-5">
+            <div
+              className="rounded-2xl p-6 flex items-start gap-3"
+              style={{ background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)' }}
+            >
+              <ShieldCheck className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-green)' }} />
+              <div>
+                <p className="text-sm font-bold" style={{ color: 'var(--color-green)' }}>Blockchain Verified</p>
+                <p className="text-xs mt-1" style={{ color: 'var(--color-muted)' }}>
+                  This record is cryptographically secured on-chain and cannot be altered retroactively.
+                </p>
+              </div>
+            </div>
+
+            <div className="card space-y-4">
+              <h3 className="font-bold">How It Works</h3>
+              <ol className="space-y-3 text-sm" style={{ color: 'var(--color-muted)' }}>
+                <li className="flex gap-3">
+                  <span className="font-bold flex-shrink-0" style={{ color: 'var(--color-green)' }}>01</span>
+                  Farmer registers a batch and its price is set on-chain.
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-bold flex-shrink-0" style={{ color: 'var(--color-green)' }}>02</span>
+                  Retailer purchases and ETH is locked in the smart contract escrow.
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-bold flex-shrink-0" style={{ color: 'var(--color-green)' }}>03</span>
+                  Each handoff is recorded as a milestone by the farmer.
+                </li>
+                <li className="flex gap-3">
+                  <span className="font-bold flex-shrink-0" style={{ color: 'var(--color-green)' }}>04</span>
+                  Retailer confirms delivery — ETH is released to the farmer.
+                </li>
+              </ol>
+            </div>
+
+            <div className="card" style={{ background: 'var(--color-surface-2)' }}>
+              <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: 'var(--color-muted)' }}>
+                Block Explorer
+              </p>
+              <a
+                href={`https://sepolia.etherscan.io/address/${addressAgriChain}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-sm font-bold hover:underline"
+                style={{ color: 'var(--color-blue)' }}
+              >
+                View Contract on Etherscan <ArrowUpRight size={14} />
+              </a>
+            </div>
+          </div>
+        </div>
+
+        {/* TIMELINE */}
+        <div>
+          <div className="flex items-center gap-3 mb-8">
+            <div
+              className="w-2 h-2 rounded-full"
+              style={{ background: 'var(--color-green)', boxShadow: '0 0 12px rgba(34,197,94,0.5)' }}
+            />
+            <h2 className="text-xl font-bold uppercase tracking-tight">Supply Chain Journey</h2>
+          </div>
+          <BatchTimeline history={historyData || []} batch={batch} />
+        </div>
+      </main>
+    </div>
+  );
+}
