@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+﻿import { useParams } from 'react-router-dom';
 import { useReadContract } from 'wagmi';
 import { addressAgriChain, aBIAgriChain, mapBatch } from '../lib/contract';
 import BatchTimeline from '../components/BatchTimeline';
@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 const statusMap = {
-  0: "Yield Formation", 1: "Harvesting", 2: "In Transit",
+  0: "Harvested", 1: "In Transit", 2: "At Warehouse",
   3: "Out for Delivery", 4: "Delivered",
 };
 const statusAccent = {
@@ -73,7 +73,7 @@ export default function VerifyPage() {
   const batch = rawData ? mapBatch(rawData) : null;
   const isValidBatch = batch && batch.cropName;
 
-  /* ── Loading ─────────────────────────────────────────────── */
+  /* ΓöÇΓöÇ Loading ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */
   if (bLoading || hLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
@@ -85,7 +85,7 @@ export default function VerifyPage() {
     );
   }
 
-  /* ── Not found ───────────────────────────────────────────── */
+  /* ΓöÇΓöÇ Not found ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ */
   if (!isValidId || isError || !isValidBatch) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--color-bg)' }}>
@@ -130,7 +130,7 @@ export default function VerifyPage() {
               Trace your <span className="italic" style={{ color: 'var(--color-green)' }}>Produce.</span>
             </h1>
             <p className="mt-4" style={{ color: 'var(--color-muted)' }}>
-              Every detail below is immutable — written to Ethereum Sepolia and tamper-proof.
+              Every detail below is immutable ΓÇö written to Ethereum Sepolia and tamper-proof.
             </p>
           </div>
           <div
@@ -151,7 +151,7 @@ export default function VerifyPage() {
         {/* MAIN CARD */}
         <div className="grid grid-cols-12 gap-12 items-start">
 
-          {/* Left col — product identity */}
+          {/* Left col ΓÇö product identity */}
           <div className="col-span-7 card space-y-6">
             <div className="flex justify-between items-start">
               <div>
@@ -163,7 +163,7 @@ export default function VerifyPage() {
                 </div>
                 <h2 className="text-5xl font-bold uppercase tracking-tight">{batch.cropName}</h2>
                 <p className="font-mono text-[10px] mt-2" style={{ color: 'var(--color-muted)' }}>
-                  Batch #{batchId} · {addressAgriChain.slice(0, 14)}...
+                  Batch #{batchId} ┬╖ {addressAgriChain.slice(0, 14)}...
                 </p>
               </div>
               <div
@@ -218,7 +218,7 @@ export default function VerifyPage() {
             </div>
           </div>
 
-          {/* Right col — stats card */}
+          {/* Right col ΓÇö stats card */}
           <div className="col-span-5 space-y-5">
             <div
               className="rounded-2xl p-6 flex items-start gap-3"
@@ -250,7 +250,7 @@ export default function VerifyPage() {
                 </li>
                 <li className="flex gap-3">
                   <span className="font-bold flex-shrink-0" style={{ color: 'var(--color-green)' }}>04</span>
-                  Retailer confirms delivery — ETH is released to the farmer.
+                  Retailer confirms delivery ΓÇö ETH is released to the farmer.
                 </li>
               </ol>
             </div>
