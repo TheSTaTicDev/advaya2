@@ -4,7 +4,7 @@ export default function QRGenerator({ batchId }) {
   // Add this log right at the top
   console.log("DEBUG 5: QRGenerator Prop received:", batchId, "Type:", typeof batchId);
 
-  const verifyUrl = `${window.location.origin}/verify/${batchId}`;
+  const verifyUrl = `https://static-agriproof.vercel.app/verify/${batchId}`;
 
   return (
     <div className="flex flex-col items-center bg-white p-6 rounded-2xl shadow-xl w-fit mx-auto mt-6">
