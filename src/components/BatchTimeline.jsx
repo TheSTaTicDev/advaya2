@@ -1,9 +1,9 @@
 import { CheckCircle, Clock } from 'lucide-react';
 
 const statusMap = {
-  0: "Harvested",
-  1: "In Transit",
-  2: "At Warehouse",
+  0: "Yield Formation",
+  1: "Harvesting",
+  2: "In Transit",
   3: "Out for Delivery",
   4: "Delivered",
 };

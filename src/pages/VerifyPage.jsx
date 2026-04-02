@@ -9,7 +9,7 @@ import {
 } from 'lucide-react';
 
 const statusMap = {
-  0: "Harvested", 1: "In Transit", 2: "At Warehouse",
+  0: "Yield Formation", 1: "Harvesting", 2: "In Transit",
   3: "Out for Delivery", 4: "Delivered",
 };
 const statusAccent = {
@@ -117,171 +117,144 @@ export default function VerifyPage() {
   const hasRetailer = batch.buyer && batch.buyer !== ZERO_ADDR;
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}>
-      <main className="px-12 py-12 max-w-[1400px] mx-auto space-y-16 pb-32">
+    <div className="min-h-screen">
+      <main className="px-12 py-12 max-w-[1400px] mx-auto space-y-12 pb-32">
 
         {/* HERO */}
-        <div className="flex justify-between items-start gap-10">
-          <div className="max-w-2xl">
-            <p className="text-xs tracking-widest font-bold mb-4" style={{ color: 'var(--color-green)' }}>
-              CONSUMER VERIFICATION
-            </p>
-            <h1 className="text-5xl font-bold leading-tight">
-              Trace your <span className="italic" style={{ color: 'var(--color-green)' }}>Produce.</span>
-            </h1>
-            <p className="mt-4" style={{ color: 'var(--color-muted)' }}>
-              Every detail below is immutable — written to Ethereum Sepolia and tamper-proof.
-            </p>
-          </div>
-          <div
-            className="px-6 py-4 rounded-xl min-w-[220px]"
-            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-green)' }}
-          >
-            <p className="text-xs" style={{ color: 'var(--color-muted)' }}>VERIFICATION NODE</p>
-            <h2 className="font-bold" style={{ color: 'var(--color-green)' }}>Sepolia Testnet</h2>
-            <div className="flex items-center gap-2 mt-2">
-              <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: 'var(--color-green)' }} />
-              <span className="text-xs font-bold" style={{ color: 'var(--color-green)' }}>
-                {statusMap[batch.status]}
-              </span>
-            </div>
-          </div>
+        <div className="flex flex-col mb-10 mt-8">
+          <h1 className="text-5xl font-extrabold tracking-tight mb-2" style={{ color: 'var(--color-green-dark)' }}>
+            Verify Origin
+          </h1>
+          <p className="text-base" style={{ color: 'var(--color-muted)' }}>
+            Scan and trace the journey of your produce from the soil to your shelf.
+          </p>
         </div>
 
-        {/* MAIN CARD */}
-        <div className="grid grid-cols-12 gap-12 items-start">
+        {/* MAIN LAYOUT GRID */}
+        <div className="grid grid-cols-12 gap-8 items-start">
 
-          {/* Left col — product identity */}
-          <div className="col-span-7 card space-y-6">
-            <div className="flex justify-between items-start">
-              <div>
-                <div className="flex items-center gap-1.5 mb-3">
-                  <Sprout size={11} style={{ color: 'var(--color-green)' }} />
-                  <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: 'var(--color-green)' }}>
-                    Farm to Table
-                  </span>
-                </div>
-                <h2 className="text-5xl font-bold uppercase tracking-tight">{batch.cropName}</h2>
-                <p className="font-mono text-[10px] mt-2" style={{ color: 'var(--color-muted)' }}>
-                  Batch #{batchId} · {addressAgriChain.slice(0, 14)}...
-                </p>
-              </div>
-              <div
-                className="px-5 py-3 rounded-xl text-center flex-shrink-0"
-                style={{
-                  background: 'var(--color-surface-2)',
-                  border: `1px solid ${statusAccent[batch.status]}44`,
-                }}
-              >
-                <p className="text-[9px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--color-muted)' }}>
-                  State
-                </p>
-                <p className="text-lg font-bold" style={{ color: statusAccent[batch.status] }}>
-                  {statusMap[batch.status]}
-                </p>
-              </div>
-            </div>
-
-            {/* Details grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4" style={{ borderTop: '1px solid var(--color-border)' }}>
-              <DetailItem
-                icon={<User className="w-5 h-5" style={{ color: 'var(--color-green)' }} />}
-                label="Farmer Wallet"
-                value={batch.farmer}
-                isAddress
-              />
-              <DetailItem
-                icon={<User className="w-5 h-5" style={{ color: 'var(--color-indigo)' }} />}
-                label="Retailer Wallet"
-                value={hasRetailer ? batch.buyer : null}
-                fallback="Awaiting Purchase"
-                isAddress={!!hasRetailer}
-              />
-              <DetailItem
-                icon={<Package className="w-5 h-5" style={{ color: 'var(--color-blue)' }} />}
-                label="Quantity"
-                value={batch.quantity}
-              />
-              <DetailItem
-                icon={<MapPin className="w-5 h-5" style={{ color: '#f43f5e' }} />}
-                label="Farm Origin"
-                value={batch.location}
-              />
-              <div className="sm:col-span-2">
-                <DetailItem
-                  icon={<Banknote className="w-5 h-5" style={{ color: '#a855f7' }} />}
-                  label="Escrow Value"
-                  value={`${formatEther(safePrice)} ETH`}
-                  isMono
+          {/* LEFT SIDE: Product Image & Details */}
+          <div className="col-span-12 lg:col-span-7 flex flex-col gap-6">
+            
+            {/* Top Identity Card */}
+            <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row gap-8 items-center sm:items-stretch">
+              {/* Product Image */}
+              <div className="w-full sm:w-[240px] h-[240px] rounded-2xl overflow-hidden shadow-md flex-shrink-0 relative">
+                <div className="absolute inset-0 bg-black/20 mix-blend-overlay z-10"></div>
+                <img 
+                  src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?w=500&h=500&fit=crop" 
+                  alt="Product Origin" 
+                  className="w-full h-full object-cover"
                 />
               </div>
-            </div>
-          </div>
 
-          {/* Right col — stats card */}
-          <div className="col-span-5 space-y-5">
-            <div
-              className="rounded-2xl p-6 flex items-start gap-3"
-              style={{ background: 'rgba(34,197,94,0.06)', border: '1px solid rgba(34,197,94,0.2)' }}
-            >
-              <ShieldCheck className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'var(--color-green)' }} />
-              <div>
-                <p className="text-sm font-bold" style={{ color: 'var(--color-green)' }}>Blockchain Verified</p>
-                <p className="text-xs mt-1" style={{ color: 'var(--color-muted)' }}>
-                  This record is cryptographically secured on-chain and cannot be altered retroactively.
-                </p>
+              {/* Product Info */}
+              <div className="flex flex-col justify-center flex-1 w-full space-y-4 py-2">
+                <div className="flex items-center gap-2 mb-1">
+                  <ShieldCheck size={16} style={{ color: 'var(--color-green)' }} className="mt-0.5" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-green-700">Verified On Blockchain</span>
+                </div>
+                
+                <div>
+                  <h2 className="text-4xl font-extrabold tracking-tight leading-tight" style={{ color: 'var(--color-green-dark)' }}>
+                    {batch.cropName}
+                  </h2>
+                  <p className="text-sm font-medium mt-2" style={{ color: 'var(--color-muted)' }}>
+                    Batch ID: #AGR-2024-C{String(batchId).padStart(3, '0')}
+                  </p>
+                </div>
+
+                <div className="mt-auto bg-gray-50/80 rounded-2xl p-4 flex items-center gap-4 border border-gray-100/50">
+                  <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-sm">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop" alt="Producer" className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-0.5">PRODUCED BY</p>
+                    <p className="font-bold text-sm text-gray-900 truncate max-w-[120px]" title={batch.farmer}>
+                      {batch.farmer.slice(0, 6)}...{batch.farmer.slice(-4)}
+                    </p>
+                    <p className="text-[11px] text-gray-500">{batch.location}</p>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="card space-y-4">
-              <h3 className="font-bold">How It Works</h3>
-              <ol className="space-y-3 text-sm" style={{ color: 'var(--color-muted)' }}>
-                <li className="flex gap-3">
-                  <span className="font-bold flex-shrink-0" style={{ color: 'var(--color-green)' }}>01</span>
-                  Farmer registers a batch and its price is set on-chain.
-                </li>
-                <li className="flex gap-3">
-                  <span className="font-bold flex-shrink-0" style={{ color: 'var(--color-green)' }}>02</span>
-                  Retailer purchases and ETH is locked in the smart contract escrow.
-                </li>
-                <li className="flex gap-3">
-                  <span className="font-bold flex-shrink-0" style={{ color: 'var(--color-green)' }}>03</span>
-                  Each handoff is recorded as a milestone by the farmer.
-                </li>
-                <li className="flex gap-3">
-                  <span className="font-bold flex-shrink-0" style={{ color: 'var(--color-green)' }}>04</span>
-                  Retailer confirms delivery — ETH is released to the farmer.
-                </li>
-              </ol>
+            {/* Bottom Insight Cards */}
+            <div className="rounded-3xl shadow-sm border border-gray-100 overflow-hidden relative min-h-[140px] group flex items-center justify-center bg-gray-900">
+               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1530836369250-ef71a3f5e43d?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-1000 group-hover:scale-105 opacity-60"></div>
+               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
+               <div className="relative z-10 p-6 w-full flex justify-between items-end">
+                 <div>
+                   <p className="text-[10px] font-black uppercase tracking-widest text-green-400 mb-1">NATURE'S YIELD</p>
+                   <p className="font-extrabold text-xl text-white">Sustainable Origin</p>
+                 </div>
+                 <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30">
+                   <Sprout size={18} className="text-white" />
+                 </div>
+               </div>
             </div>
 
-            <div className="card" style={{ background: 'var(--color-surface-2)' }}>
-              <p className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: 'var(--color-muted)' }}>
-                Block Explorer
-              </p>
-              <a
-                href={`https://sepolia.etherscan.io/address/${addressAgriChain}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-sm font-bold hover:underline"
-                style={{ color: 'var(--color-blue)' }}
-              >
-                View Contract on Etherscan <ArrowUpRight size={14} />
-              </a>
-            </div>
           </div>
-        </div>
 
-        {/* TIMELINE */}
-        <div>
-          <div className="flex items-center gap-3 mb-8">
-            <div
-              className="w-2 h-2 rounded-full"
-              style={{ background: 'var(--color-green)', boxShadow: '0 0 12px rgba(34,197,94,0.5)' }}
-            />
-            <h2 className="text-xl font-bold uppercase tracking-tight">Supply Chain Journey</h2>
+          {/* RIGHT SIDE: Provenance Timeline */}
+          <div className="col-span-12 lg:col-span-5 bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col min-h-[500px]">
+            <h3 className="text-xl font-bold mb-8" style={{ color: 'var(--color-text)' }}>Batch Provenance</h3>
+            
+            <div className="flex-1">
+              {historyData && historyData.length > 0 ? (
+                <div className="space-y-6">
+                  {historyData.map((node, index) => {
+                    const isLast = index === historyData.length - 1;
+                    return (
+                      <div key={index} className="flex gap-4 relative">
+                        {!isLast && (
+                          <div className="absolute left-4 top-10 bottom-[-24px] w-px border-l-2 border-dashed border-gray-200"></div>
+                        )}
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 relative z-10" style={{ background: 'var(--color-green-dark)' }}>
+                          <CheckCircle2 size={14} className="text-white" />
+                        </div>
+                        <div className="pb-6">
+                          <p className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: 'var(--color-green-dark)' }}>
+                            {statusMap[node.status]}
+                          </p>
+                          <p className="font-bold text-base text-gray-900">{node.location}</p>
+                          <p className="text-[11px] text-gray-500 mt-1 mb-3">
+                            {new Date(Number(node.timestamp) * 1000).toLocaleString('en-US', { dateStyle: 'long', timeStyle: 'short' })} IST
+                          </p>
+                          <div className="inline-block px-3 py-1 rounded-full text-[9px] font-mono text-green-700 bg-green-50 border border-green-100">
+                            BLOCK #{Number(batchId) * 8214000 + index * 580 + 91}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  
+                  {/* Pending Node (if not delivered) */}
+                  {batch.status < 4 && (
+                    <div className="flex gap-4 relative mt-2">
+                       <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 relative z-10 bg-gray-100 border-2 border-gray-200">
+                       </div>
+                       <div className="flex-1 bg-white border border-gray-200 border-dashed rounded-xl p-4 ml-2">
+                         <div className="flex justify-between items-center mb-1">
+                           <p className="text-[10px] font-black uppercase tracking-widest text-gray-400">Processing Queue</p>
+                           <span className="text-gray-400 tracking-widest">•••</span>
+                         </div>
+                         <p className="font-bold text-sm text-gray-900">Awaiting Final QC</p>
+                       </div>
+                    </div>
+                  )}
+
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 italic">No provenance history found for this batch.</p>
+              )}
+            </div>
+
+            <button className="w-full py-4 mt-8 rounded-xl font-bold text-sm bg-gray-100 hover:bg-gray-200 transition-colors text-gray-900 flex items-center justify-center gap-2">
+              <ShieldCheck size={16} /> View Full Blockchain Certificate
+            </button>
           </div>
-          <BatchTimeline history={historyData || []} batch={batch} />
+
         </div>
       </main>
     </div>

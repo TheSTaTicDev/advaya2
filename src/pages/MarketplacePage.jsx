@@ -4,11 +4,19 @@ import { formatEther } from "viem";
 import { addressAgriChain, aBIAgriChain, mapBatch } from "../lib/contract";
 import { Loader2, MapPin, Package, CheckCircle2, ArrowRight, AlertTriangle, Sprout } from "lucide-react";
 
+import React, { useEffect } from "react";
+
 // ── Per-card component so each card has isolated tx state ──────────────────────
-function BatchCard({ batch }) {
+function BatchCard({ batch, onPurchaseSuccess }) {
   const { writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
   const isProcessing = isPending || isConfirming;
+
+  useEffect(() => {
+    if (isSuccess && onPurchaseSuccess) {
+      onPurchaseSuccess();
+    }
+  }, [isSuccess, onPurchaseSuccess]);
 
   return (
     <div
@@ -143,55 +151,53 @@ export default function MarketplacePage() {
     ) || [];
 
   return (
-    <div className="min-h-screen" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}>
-      <main className="px-12 py-12 max-w-[1400px] mx-auto">
+    <div className="min-h-screen">
+      <main className="px-12 py-12 max-w-[1400px] mx-auto space-y-12 pb-32">
 
         {/* HERO */}
-        <div className="flex justify-between items-start mb-20 gap-10">
-          <div className="max-w-2xl">
-            <p className="text-xs tracking-widest mb-4 font-bold" style={{ color: 'var(--color-green)' }}>
-              RETAILER MARKETPLACE
-            </p>
-            <h1 className="text-5xl font-bold leading-tight">
-              Secure a <span className="italic" style={{ color: 'var(--color-green)' }}>Harvest.</span>
-            </h1>
-            <p className="mt-4" style={{ color: 'var(--color-muted)' }}>
+        <div className="flex flex-col mb-10 mt-8">
+          <p className="text-[10px] font-black tracking-widest uppercase mb-3 text-green-700 opacity-80">
+            RETAILER MARKETPLACE
+          </p>
+          <h1 className="text-5xl font-extrabold tracking-tight mb-4" style={{ color: 'var(--color-green-dark)' }}>
+            Secure a <span className="italic" style={{ color: 'var(--color-green)' }}>Harvest.</span>
+          </h1>
+          <div className="flex justify-between items-end">
+            <p className="text-base max-w-2xl" style={{ color: 'var(--color-muted)' }}>
               Browse verified crop batches and lock in an escrow deal directly with the farmer.
             </p>
-          </div>
-          <div
-            className="px-6 py-4 rounded-xl min-w-[220px]"
-            style={{ background: 'var(--color-surface)', border: '1px solid var(--color-green)' }}
-          >
-            <p className="text-xs" style={{ color: 'var(--color-muted)' }}>ACTIVE NODE</p>
-            <h2 className="font-bold" style={{ color: 'var(--color-green)' }}>Sepolia Testnet</h2>
-            {available.length > 0 && (
-              <p className="text-xs mt-2" style={{ color: 'var(--color-muted)' }}>
-                {available.length} active listing{available.length !== 1 ? "s" : ""}
-              </p>
-            )}
+            <div className="bg-white px-6 py-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4">
+               <div>
+                 <p className="text-[9px] font-black uppercase tracking-widest text-gray-400 mb-0.5">ACTIVE NODE</p>
+                 <h2 className="font-bold text-sm text-gray-900">Sepolia Testnet</h2>
+               </div>
+               <div className="h-8 w-px bg-gray-100 mx-2"></div>
+               <div>
+                  <p className="text-[9px] font-black uppercase tracking-widest text-green-600 mb-0.5">AVAILABLE</p>
+                  <p className="font-bold text-sm text-green-700">{available.length || 0} Batches</p>
+               </div>
+            </div>
           </div>
         </div>
 
         {/* LISTINGS */}
         {isLoading ? (
-          <div className="flex flex-col items-center py-32 gap-4">
-            <Loader2 className="animate-spin w-8 h-8" style={{ color: 'var(--color-green)' }} />
-            <p className="text-sm font-mono" style={{ color: 'var(--color-muted)' }}>Syncing with Sepolia...</p>
+          <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
+            <Loader2 className="animate-spin w-8 h-8 text-green-600" />
+            <p className="text-sm font-mono text-gray-500">Syncing with Sepolia...</p>
           </div>
         ) : available.length === 0 ? (
-          <div
-            className="text-center py-32 rounded-2xl"
-            style={{ border: '2px dashed var(--color-border)' }}
-          >
-            <Sprout className="w-10 h-10 mx-auto mb-4" style={{ color: 'var(--color-border)' }} />
-            <h3 className="font-bold text-lg">No active harvests</h3>
-            <p className="text-sm mt-2 max-w-xs mx-auto" style={{ color: 'var(--color-muted)' }}>
-              Farmers haven't registered any batches yet. Head to the Farmer Portal to list a harvest.
+          <div className="flex flex-col items-center justify-center min-h-[400px] bg-white rounded-3xl border border-dashed border-gray-200 p-12 text-center">
+            <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+              <Sprout className="w-8 h-8 text-gray-300" />
+            </div>
+            <h3 className="font-bold text-xl text-gray-900 mb-2">No Active Harvests</h3>
+            <p className="text-sm text-gray-500 max-w-sm mx-auto">
+              Farmers haven't registered any batches yet. Check back soon or visit the Farmer Portal to simulate a listing.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {available.map(batch => (
               <BatchCard
                 key={batch.batchId.toString()}
@@ -205,10 +211,7 @@ export default function MarketplacePage() {
 
       {/* Toast */}
       {successCount > 0 && (
-        <div
-          className="fixed bottom-8 right-8 px-5 py-4 rounded-2xl font-bold flex items-center gap-3 shadow-2xl"
-          style={{ background: 'var(--color-green)', color: '#000' }}
-        >
+        <div className="fixed bottom-8 right-8 px-6 py-4 rounded-xl font-bold flex items-center gap-3 shadow-xl bg-green-500 text-white">
           <CheckCircle2 size={18} />
           Deal Secured — Locked in Escrow!
         </div>

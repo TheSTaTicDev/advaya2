@@ -8,6 +8,7 @@ import { getDefaultConfig, RainbowKitProvider, darkTheme } from '@rainbow-me/rai
 import { WagmiProvider } from 'wagmi';
 import { sepolia } from 'wagmi/chains'; // ONLY import Sepolia
 import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { RoleProvider } from './context/RoleContext';
 
 const config = getDefaultConfig({
   appName: 'AgriChain',
@@ -20,13 +21,15 @@ const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <WagmiProvider config={config}>
-      <QueryClientProvider client={queryClient}>
-        {/* initialChain={sepolia} forces the wallet to switch the moment it connects */}
-        <RainbowKitProvider theme={darkTheme()} initialChain={sepolia}>
-          <App />
-        </RainbowKitProvider>
-      </QueryClientProvider>
-    </WagmiProvider>
+    <RoleProvider>
+      <WagmiProvider config={config}>
+        <QueryClientProvider client={queryClient}>
+          {/* initialChain={sepolia} forces the wallet to switch the moment it connects */}
+          <RainbowKitProvider theme={darkTheme()} initialChain={sepolia}>
+            <App />
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </RoleProvider>
   </React.StrictMode>,
 );
