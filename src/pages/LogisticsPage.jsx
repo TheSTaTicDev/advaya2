@@ -62,7 +62,7 @@ export default function LogisticsPage() {
     <div className="min-h-screen">
       <main className="px-12 py-12 max-w-[1400px] mx-auto space-y-12 pb-32">
 
-        {/* HERO */}
+        
         <div className="flex flex-col mb-10 mt-8">
           <h1 className="text-5xl font-extrabold tracking-tight mb-2 text-white dark:text-white" style={{ color: 'var(--color-green-dark)' }}>
             Crop Management
@@ -72,10 +72,10 @@ export default function LogisticsPage() {
           </p>
         </div>
 
-        {/* LOGISTICS DASHBOARD GRID */}
+        
         <div className="grid grid-cols-12 gap-8 items-start">
 
-          {/* LEFT SIDEBAR (Load Batch & Active) */}
+          
           <div className="col-span-12 lg:col-span-4 bg-gray-950 text-white rounded-3xl p-8 space-y-8 relative overflow-hidden group">
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1495539406979-bf61750d38ad?q=80&w=800&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-1000 group-hover:scale-105 opacity-20"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/80 to-transparent"></div>
@@ -130,13 +130,13 @@ export default function LogisticsPage() {
             </div>
           </div>
 
-          {/* MAIN CONTENT AREA */}
+          
           <div className="col-span-12 lg:col-span-8 flex flex-col gap-8">
 
-            {/* Main Batch Card Area */}
+            
             {isValidBatch ? (
               <div className="card p-0 overflow-hidden border-none shadow-lg">
-                {/* Hero Banner */}
+                
                 <div className="relative h-48 bg-gray-900 overflow-hidden">
                   <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1586528116311-ad8ed7c80a30?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center opacity-70"></div>
                   <div className="absolute inset-0 bg-gradient-to-t from-green-950/90 to-transparent"></div>
@@ -151,9 +151,9 @@ export default function LogisticsPage() {
                   </div>
                 </div>
 
-                {/* Content Layout */}
+                
                 <div className="p-8 grid grid-cols-2 gap-8">
-                  {/* Left Column: Update Status */}
+                  
                   <div className="space-y-6">
                     <h3 className="text-xl font-bold" style={{ color: 'var(--color-text)' }}>Update Status</h3>
 
@@ -217,7 +217,7 @@ export default function LogisticsPage() {
                     )}
                   </div>
 
-                  {/* Right Column: Artifacts */}
+                  
                   <div className="bg-[var(--color-surface-2)] p-6 rounded-2xl border border-gray-100">
                     <h3 className="text-lg font-bold mb-5" style={{ color: 'var(--color-text)' }}>Batch Artifacts</h3>
                     <div className="space-y-5">
@@ -258,7 +258,7 @@ export default function LogisticsPage() {
               </div>
             )}
 
-            {/* Bottom Row: Timeline & Network Efficiency */}
+            
             {isValidBatch && (
               <div className="grid grid-cols-2 gap-8 mt-2">
                 <div className="card p-8 bg-[var(--color-surface-2)] border-none">

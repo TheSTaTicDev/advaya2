@@ -1,14 +1,11 @@
-// Sepolia Contract Address — redeployed with escrow fix
+
 export const addressAgriChain = "0xB25a227B80F058d54809d718f0750E36fFcF95F5";
 
-/**
- * Safe Mapper Utility
- * Converts blockchain data into a standard object regardless of format.
- */
+
 export const mapBatch = (data) => {
     if (!data) return null;
 
-    // If data is an array (positional return)
+    
     if (Array.isArray(data)) {
         return {
             batchId: data[0],
@@ -23,7 +20,7 @@ export const mapBatch = (data) => {
         };
     }
 
-    // If data is an object (named component return from hardcoded ABI)
+    
     return {
         ...data,
         status: Number(data.status)

@@ -1,7 +1,7 @@
 import { QRCodeSVG } from 'qrcode.react';
 
 export default function QRGenerator({ batchId }) {
-  // Add this log right at the top
+  
   console.log("DEBUG 5: QRGenerator Prop received:", batchId, "Type:", typeof batchId);
 
   const verifyUrl = `https://static-agriproof.vercel.app/verify/${batchId}`;

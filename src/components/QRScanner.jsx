@@ -5,14 +5,14 @@ import { useNavigate } from 'react-router-dom';
 export default function QRScanner({ onScanStart, onScanComplete }) {
   const [scanning, setScanning] = useState(false);
   const navigate = useNavigate();
-  const scannerRef = useRef(null); // Keep a reference to prevent double-init
+  const scannerRef = useRef(null); 
 
   useEffect(() => {
-    // Only run if scanning is true AND the div actually exists in the DOM
+    
     if (scanning && document.getElementById("reader")) {
       if (onScanStart) onScanStart();
 
-      // Small timeout to ensure React has finished painting the DOM
+      
       const timer = setTimeout(() => {
         if (!scannerRef.current) {
           scannerRef.current = new Html5QrcodeScanner(
@@ -29,14 +29,14 @@ export default function QRScanner({ onScanStart, onScanComplete }) {
             (decodedText) => {
               console.log("🔍 Scanned Content:", decodedText);
               
-              // Handle both Full URLs and Raw IDs
+              
               let batchId = decodedText;
               if (decodedText.includes('/verify/')) {
                 const parts = decodedText.split('/');
                 batchId = parts[parts.length - 1];
               }
 
-              // Cleanup
+              
               scannerRef.current.clear().then(() => {
                 scannerRef.current = null;
                 setScanning(false);
@@ -49,7 +49,7 @@ export default function QRScanner({ onScanStart, onScanComplete }) {
               }).catch(err => console.error("Failed to clear scanner", err));
             },
             (error) => {
-              // Silence noisy "no QR found" logs
+              
             }
           );
         }
@@ -58,7 +58,7 @@ export default function QRScanner({ onScanStart, onScanComplete }) {
       return () => clearTimeout(timer);
     }
 
-    // Cleanup when component unmounts or scanning stops
+    
     return () => {
       if (scannerRef.current) {
         scannerRef.current.clear().then(() => {

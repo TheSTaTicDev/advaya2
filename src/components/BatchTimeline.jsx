@@ -13,7 +13,7 @@ export default function BatchTimeline({ history, batch }) {
 
   let displayHistory = [...history];
 
-  // Insert synthetic event if buyer exists
+  
   if (batch && batch.buyer && batch.buyer !== "0x0000000000000000000000000000000000000000") {
     const paymentTimestamp = displayHistory[0] ? Number(displayHistory[0].timestamp) + 1 : Date.now() / 1000;
     const paymentEvent = {
@@ -32,7 +32,7 @@ export default function BatchTimeline({ history, batch }) {
       </h3>
       
       <div className="relative pl-6 space-y-8">
-        {/* Timeline line connecting events */}
+        
         <div className="absolute left-10 top-2 bottom-6 w-0.5 bg-neutral-700"></div>
 
         {displayHistory.map((event, index) => {

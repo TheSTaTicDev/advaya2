@@ -73,7 +73,7 @@ export default function VerifyPage() {
   const batch = rawData ? mapBatch(rawData) : null;
   const isValidBatch = batch && batch.cropName;
 
-  /* ── Loading ─────────────────────────────────────────────── */
+  
   if (bLoading || hLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: 'var(--color-bg)' }}>
@@ -85,7 +85,7 @@ export default function VerifyPage() {
     );
   }
 
-  /* ── Not found ───────────────────────────────────────────── */
+  
   if (!isValidId || isError || !isValidBatch) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: 'var(--color-bg)' }}>
@@ -120,7 +120,7 @@ export default function VerifyPage() {
     <div className="min-h-screen">
       <main className="px-12 py-12 max-w-[1400px] mx-auto space-y-12 pb-32">
 
-        {/* HERO */}
+        
         <div className="flex flex-col mb-10 mt-8">
           <h1 className="text-5xl font-extrabold tracking-tight mb-2" style={{ color: 'var(--color-green-dark)' }}>
             Verify Origin
@@ -130,15 +130,15 @@ export default function VerifyPage() {
           </p>
         </div>
 
-        {/* MAIN LAYOUT GRID */}
+        
         <div className="grid grid-cols-12 gap-8 items-start">
 
-          {/* LEFT SIDE: Product Image & Details */}
+          
           <div className="col-span-12 lg:col-span-7 flex flex-col gap-6">
 
-            {/* Top Identity Card */}
+            
             <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex flex-col sm:flex-row gap-8 items-center sm:items-stretch">
-              {/* Product Image */}
+              
               <div className="w-full sm:w-[240px] h-[240px] rounded-2xl overflow-hidden shadow-md flex-shrink-0 relative">
                 <div className="absolute inset-0 bg-black/20 mix-blend-overlay z-10"></div>
                 <img
@@ -148,7 +148,7 @@ export default function VerifyPage() {
                 />
               </div>
 
-              {/* Product Info */}
+              
               <div className="flex flex-col justify-center flex-1 w-full space-y-4 py-2">
                 <div className="flex items-center gap-2 mb-1">
                   <ShieldCheck size={16} style={{ color: 'var(--color-green)' }} className="mt-0.5" />
@@ -179,7 +179,7 @@ export default function VerifyPage() {
               </div>
             </div>
 
-            {/* Bottom Insight Cards */}
+            
             <div className="rounded-3xl shadow-sm border border-gray-100 overflow-hidden relative min-h-[140px] group flex items-center justify-center bg-gray-900">
               <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1530836369250-ef71a3f5e43d?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-1000 group-hover:scale-105 opacity-60"></div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
@@ -196,7 +196,7 @@ export default function VerifyPage() {
 
           </div>
 
-          {/* RIGHT SIDE: Provenance Timeline */}
+          
           <div className="col-span-12 lg:col-span-5 bg-white rounded-3xl p-8 shadow-sm border border-gray-100 flex flex-col min-h-[500px]">
             <h3 className="text-xl font-bold mb-8" style={{ color: 'var(--color-text)' }}>Batch Provenance</h3>
 
@@ -229,7 +229,7 @@ export default function VerifyPage() {
                     );
                   })}
 
-                  {/* Pending Node (if not delivered) */}
+                  
                   {batch.status < 4 && (
                     <div className="flex gap-4 relative mt-2">
                       <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 relative z-10 bg-gray-100 border-2 border-gray-200">

@@ -35,14 +35,14 @@ export default function FarmerPage() {
   const isFormValid = formData.cropName && formData.quantity && formData.location && formData.price;
   const isLoading = isPending || isConfirming;
 
-  // ✅ SUCCESS MODAL
+  
   if (isSuccess) {
     const batchId = getBatchIdFromLogs();
     return (
       <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
         <div className="flex w-[700px] rounded-[2rem] overflow-hidden shadow-2xl bg-white">
 
-          {/* LEFT (GREEN) */}
+          
           <div className="w-[45%] p-10 text-white flex flex-col items-center justify-center relative" style={{ background: 'var(--color-green-dark)' }}>
             <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mb-6">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
@@ -55,7 +55,7 @@ export default function FarmerPage() {
             <p className="text-[9px] uppercase tracking-widest font-bold mt-4 opacity-70">SCAN TO VERIFY PROVENANCE</p>
           </div>
 
-          {/* RIGHT (WHITE) */}
+          
           <div className="w-[55%] p-10 flex flex-col justify-center bg-white">
             <h3 className="text-xl font-bold mb-6" style={{ color: 'var(--color-text)' }}>Batch Summary</h3>
             <div className="space-y-5 text-sm mb-10">
@@ -90,12 +90,12 @@ export default function FarmerPage() {
     );
   }
 
-  // ✅ MAIN PAGE
+  
   return (
     <div className="min-h-screen">
       <main className="px-12 py-12 max-w-[1400px] mx-auto relative z-10">
 
-        {/* HERO */}
+        
         <div className="flex justify-between items-start mb-16 gap-10 mt-8">
           <div className="max-w-xl">
             <p className="text-[10px] font-black tracking-widest uppercase mb-3" style={{ color: 'var(--color-green-dark)', opacity: 0.7 }}>AGRICULTURAL ARCHIVE</p>
@@ -118,10 +118,10 @@ export default function FarmerPage() {
           </div>
         </div>
 
-        {/* GRID */}
+        
         <div className="grid grid-cols-12 gap-8 items-start">
 
-          {/* FORM — col 7 */}
+          
           <div className="col-span-12 lg:col-span-7 card p-10 space-y-8">
             <h2 className="text-xl font-bold flex items-center gap-2" style={{ color: 'var(--color-text)' }}>
               <span style={{ color: 'var(--color-green-dark)' }}>🌿</span> Batch Manifest
@@ -238,16 +238,16 @@ export default function FarmerPage() {
             </div>
           </div>
 
-          {/* RIGHT SIDE — col 5 */}
+          
           <div className="col-span-12 lg:col-span-5 relative h-full min-h-[500px] rounded-3xl overflow-hidden shadow-xl border border-gray-100 group">
-            {/* Background Image */}
+            
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1400&auto=format&fit=crop')] bg-cover bg-center transition-transform duration-700 group-hover:scale-105"></div>
 
-            {/* Gradients for readability */}
+            
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
             <div className="absolute inset-0 bg-gradient-to-bl from-green-900/40 to-transparent mix-blend-multiply"></div>
 
-            {/* Content Overlay */}
+            
             <div className="absolute inset-0 p-10 flex flex-col justify-end text-white">
               <span className="w-fit px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest uppercase bg-white/20 backdrop-blur-md border border-white/30 mb-4 inline-block">
                 Regenerative Agriculture

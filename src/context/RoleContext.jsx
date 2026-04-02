@@ -4,7 +4,7 @@ const RoleContext = createContext(undefined);
 
 export function RoleProvider({ children }) {
   const [role, setRoleState] = useState(() => {
-    // Initialize from local storage if available
+    
     if (typeof window !== 'undefined') {
       return localStorage.getItem('user_role') || null;
     }

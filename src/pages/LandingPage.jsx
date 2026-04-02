@@ -19,7 +19,7 @@ export default function LandingPage() {
     <div className="min-h-screen flex items-center justify-center p-6" style={{ background: 'var(--color-bg)', color: 'var(--color-text)' }}>
       <div className="max-w-4xl w-full grid md:grid-cols-2 gap-8 relative z-10">
         
-        {/* Farmer Card */}
+        
         <button 
           onClick={() => handleSelectRole('farmer')}
           className="group relative overflow-hidden rounded-3xl p-10 text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"
@@ -47,7 +47,7 @@ export default function LandingPage() {
           </div>
         </button>
 
-        {/* Retailer Card */}
+        
         <button 
           onClick={() => handleSelectRole('retailer')}
           className="group relative overflow-hidden rounded-3xl p-10 text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl"

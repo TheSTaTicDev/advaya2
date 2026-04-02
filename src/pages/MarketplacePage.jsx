@@ -6,7 +6,7 @@ import { Loader2, MapPin, Package, CheckCircle2, ArrowRight, AlertTriangle, Spro
 
 import React, { useEffect } from "react";
 
-// ── Per-card component so each card has isolated tx state ──────────────────────
+
 function BatchCard({ batch, onPurchaseSuccess }) {
   const { writeContract, data: hash, isPending, error } = useWriteContract();
   const { isLoading: isConfirming, isSuccess } = useWaitForTransactionReceipt({ hash });
@@ -25,7 +25,7 @@ function BatchCard({ batch, onPurchaseSuccess }) {
         borderColor: isSuccess ? 'rgba(34,197,94,0.35)' : 'var(--color-border)',
       }}
     >
-      {/* Header */}
+      
       <div className="flex justify-between items-start">
         <div>
           <p className="text-xs tracking-widest font-bold mb-2" style={{ color: 'var(--color-green)' }}>
@@ -43,7 +43,7 @@ function BatchCard({ batch, onPurchaseSuccess }) {
         </span>
       </div>
 
-      {/* Details */}
+      
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--color-muted)' }}>
           <MapPin size={13} />
@@ -55,7 +55,7 @@ function BatchCard({ batch, onPurchaseSuccess }) {
         </div>
       </div>
 
-      {/* Farmer address */}
+      
       <div
         className="rounded-xl px-3 py-2.5"
         style={{ background: 'var(--color-surface-2)', border: '1px solid var(--color-border)' }}
@@ -68,7 +68,7 @@ function BatchCard({ batch, onPurchaseSuccess }) {
         </p>
       </div>
 
-      {/* Price + action */}
+      
       <div
         className="mt-auto pt-4 flex items-center justify-between gap-3"
         style={{ borderTop: '1px solid var(--color-border)' }}
@@ -104,7 +104,7 @@ function BatchCard({ batch, onPurchaseSuccess }) {
         </button>
       </div>
 
-      {/* Error */}
+      
       {error && (
         <div
           className="flex items-start gap-2 rounded-xl px-3 py-2"
@@ -120,7 +120,7 @@ function BatchCard({ batch, onPurchaseSuccess }) {
   );
 }
 
-// ── Main page ──────────────────────────────────────────────────────────────────
+
 export default function MarketplacePage() {
   const [successCount, setSuccessCount] = useState(0);
 
@@ -154,7 +154,7 @@ export default function MarketplacePage() {
     <div className="min-h-screen">
       <main className="px-12 py-12 max-w-[1400px] mx-auto space-y-12 pb-32">
 
-        {/* HERO */}
+        
         <div className="flex flex-col mb-10 mt-8">
           <p className="text-[10px] font-black tracking-widest uppercase mb-3 text-green-700 opacity-80">
             RETAILER MARKETPLACE
@@ -180,7 +180,7 @@ export default function MarketplacePage() {
           </div>
         </div>
 
-        {/* LISTINGS */}
+        
         {isLoading ? (
           <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
             <Loader2 className="animate-spin w-8 h-8 text-green-600" />
@@ -209,7 +209,7 @@ export default function MarketplacePage() {
         )}
       </main>
 
-      {/* Toast */}
+      
       {successCount > 0 && (
         <div className="fixed bottom-8 right-8 px-6 py-4 rounded-xl font-bold flex items-center gap-3 shadow-xl bg-green-500 text-white">
           <CheckCircle2 size={18} />
