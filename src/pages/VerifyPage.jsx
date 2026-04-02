@@ -5,7 +5,7 @@ import BatchTimeline from '../components/BatchTimeline';
 import { formatEther } from 'viem';
 import {
   ShieldCheck, Package, MapPin, User, Banknote,
-  Loader2, AlertCircle, Sprout, ArrowUpRight,
+  Loader2, AlertCircle, Sprout, ArrowUpRight, CheckCircle2
 } from 'lucide-react';
 
 const statusMap = {
